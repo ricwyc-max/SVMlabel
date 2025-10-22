@@ -1,0 +1,47 @@
+import cv2
+import numpy as np
+from PIL import Image
+
+def mask_to_polygon(mask_path, simplify_tolerance=1.0):
+    """
+    将掩码图像转换为多边形坐标
+    
+    参数:
+    - mask_path: 掩码图像路径
+    - simplify_tolerance: 多边形简化容差，值越大多边形越简单
+    
+    返回:
+    - polygons: 多边形列表，每个多边形是点的数组
+    """
+    
+    # 读取掩码图像
+    mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
+    
+    # 二值化处理
+    _, binary_mask = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY)
+    
+    # 查找轮廓
+    contours, _ = cv2.findContours(
+        binary_mask, 
+        cv2.RETR_EXTERNAL,  # 只检测外部轮廓
+        cv2.CHAIN_APPROX_TC89_KCOS  # 使用Teh-Chin链逼近算法，效果好
+    )
+    
+    polygons = []
+    for contour in contours:
+        # 轮廓需要至少3个点才能形成多边形
+        if len(contour) >= 3:
+            # 可选：简化多边形（减少点数）
+            epsilon = simplify_tolerance
+            approx = cv2.approxPolyDP(contour, epsilon, True)
+            
+            # 转换为扁平的点列表 [x1, y1, x2, y2, ...]
+            polygon = approx.flatten().tolist()
+            polygons.append(polygon)
+    
+    return polygons
+
+# 使用示例
+polygons = mask_to_polygon("mask.png")
+for i, polygon in enumerate(polygons):
+    print(f"多边形 {i+1}: {polygon}")
