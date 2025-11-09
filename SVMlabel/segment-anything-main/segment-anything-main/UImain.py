@@ -9,6 +9,7 @@ from matplotlib.figure import Figure
 import matplotlib
 import cv2
 from utils import SAM
+import torch
 
 # 设置 Matplotlib 使用 Qt5Agg 后端
 matplotlib.use("Qt5Agg")
@@ -85,6 +86,41 @@ class MainWindow():
         self.ui.nextFile.triggered.connect(self.nextFileButton_click)#工具栏openDoc（下一文件）工具被点击时触发
 
 
+    def setup_device(self):
+        """
+        设置并返回可用的设备
+        """
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+
+        if device == "cuda":
+            #print(" CUDA可用，使用GPU加速")
+            #print(f"🔧 GPU设备: {torch.cuda.get_device_name()}")
+            #print(f"💾 GPU内存: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
+
+            # 可选：设置当前GPU设备（在多GPU环境下）
+            # torch.cuda.set_device(0)
+            self.ui.useGPU.setChecked(1)#将是否使用GPU勾选
+
+            # 清空GPU缓存（可选）
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+        else:
+            #print(" CUDA不可用，使用CPU")
+            #print("注意：在CPU上运行SAM会非常慢！")
+            self.ui.useGPU.setChecked(0)#将是否使用GPU取消勾选
+            self.ui.useGPU.setEnabled(False)#禁用复选框，使之不能够被交互
+            pass
+
+
+        #最后根据复选框选中情况设置CPU\GPU设备
+        if self.ui.useGPU.isChecked():
+            device = "cuda"
+        else:
+            device='cpu'
+
+
+        return device
+
     def remove_all_widgets(self,layout):
             # 从布局中移除所有控件
             while layout.count():
@@ -127,12 +163,13 @@ class MainWindow():
             self.remove_all_widgets(self.ui.SAMLayout)
             self.remove_all_widgets(self.ui.segViewLayout)
             self.remove_all_widgets(self.ui.promptViewLayout)
+
             #将第一张图片进行显示
             #获取左右的原始视图
             self.canvas,self.axes = createMatImg(self.file_path_list[self.nowImageNum])
             self.canvas1,self.axes1 = createMatImg(self.file_path_list[self.nowImageNum])
             #实例化SAM对象
-            sam = SAM.SAM(self.file_path_list[self.nowImageNum])
+            sam = SAM.SAM(self.file_path_list[self.nowImageNum],device = self.setup_device())
             self.canvasSAM,self.axesSAM = sam.getSAMView()#获取SAM视图
 
 
@@ -163,25 +200,28 @@ class MainWindow():
     def on_mouse_move(self, event):
         if event.inaxes == self.axes:
             x, y = event.xdata, event.ydata
-            print(f"鼠标位置: x={x:.2f}, y={y:.2f}")
+            #print(f"鼠标位置: x={x:.2f}, y={y:.2f}")
             in_img=checkImgPoints(self.file_path_list[self.nowImageNum],x,y)
-            print(in_img)
+            #print(in_img)
+            self.ui.positionRecoder.setText(f'鼠标位置: x={x:.2f}, y={y:.2f};是否在图片内部={in_img}')
 
     #显示鼠标在图表中的位置（右边roiView视图移动的时候）
     def on_mouse_move1(self, event):
         if event.inaxes == self.axes1:
             x, y = event.xdata, event.ydata
-            print(f"鼠标位置: x={x:.2f}, y={y:.2f}")
+            #print(f"鼠标位置: x={x:.2f}, y={y:.2f}")
             in_img=checkImgPoints(self.file_path_list[self.nowImageNum],x,y)
-            print(in_img)
+            #print(in_img)
+            self.ui.positionRecoder.setText(f'鼠标位置: x={x:.2f}, y={y:.2f};是否在图片内部={in_img}')
 
     #显示鼠标在图表中的位置（右边SAM视图移动的时候）
     def on_mouse_moveSAM(self, event):
         if event.inaxes == self.axesSAM:
             x, y = event.xdata, event.ydata
-            print(f"鼠标位置: x={x:.2f}, y={y:.2f}")
+            #print(f"鼠标位置: x={x:.2f}, y={y:.2f}")
             in_img=checkImgPoints(self.file_path_list[self.nowImageNum],x,y)
-            print(in_img)
+            #print(in_img)
+            self.ui.positionRecoder.setText(f'鼠标位置: x={x:.2f}, y={y:.2f};是否在图片内部={in_img}')
 
 
     #上一文件工具调用时触发
@@ -325,6 +365,22 @@ if __name__ == '__main__':
     mainWindow = MainWindow()  # 实例化界面
     mainWindow.show()  # 展示界面
     sys.exit(app.exec_())  # 启动事件循环
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

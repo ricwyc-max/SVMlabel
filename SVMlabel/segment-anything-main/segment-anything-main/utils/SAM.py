@@ -17,24 +17,34 @@ from segment_anything.utils.transforms import ResizeLongestSide
 import matplotlib.pyplot as plt
 import numpy as np
 import random
+import torch
+
+
 
 
 class SAM():
-    def __init__(self,imgPath,input_points=None,input_labels = None,input_box =None):
+    def __init__(self,imgPath,input_points=None,input_labels = None,input_box =None,device = 'cpu'):
 
         self.imgPath = imgPath
         self.input_points = input_points
         self.input_labels = input_labels
         self.input_box = input_box
 
-        device = "cuda"#CUDA运行
+        self.device = device#CUDA运行(如果有的话)
         self.sam = sam_model_registry["vit_h"](checkpoint="../../sam_vit_h_4b8939.pth")#指定模型位置和模型名称
-        self.sam.to(device=device)#将模型导到CUDA中
+
+        self.sam.to(device=self.device)#将模型导到CUDA中
+
         self.img = cv2.imread(imgPath)
         self.img = cv2.cvtColor(self.img,cv2.COLOR_BGR2RGB)
         self.predictor = SamPredictor(self.sam)
         self.predictor.set_image(self.img)#只需要使用一次
         #print(img.shape)
+
+        self.masks = []
+        self.scores=[]
+        self.logits=[]
+
 
 
 

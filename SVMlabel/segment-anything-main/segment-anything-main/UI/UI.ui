@@ -34,7 +34,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout" stretch="10,2">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0">
+     <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,0">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
@@ -60,7 +60,7 @@
              <x>0</x>
              <y>0</y>
              <width>983</width>
-             <height>1284</height>
+             <height>1264</height>
             </rect>
            </property>
           </widget>
@@ -89,14 +89,14 @@
              <x>0</x>
              <y>0</y>
              <width>983</width>
-             <height>1284</height>
+             <height>1264</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
             <item>
              <widget class="QTabWidget" name="tabWidget">
               <property name="currentIndex">
-               <number>2</number>
+               <number>1</number>
               </property>
               <property name="movable">
                <bool>true</bool>
@@ -149,6 +149,16 @@
         </item>
        </layout>
       </item>
+      <item>
+       <widget class="QLabel" name="positionRecoder">
+        <property name="styleSheet">
+         <string notr="true">QLabel{border: 0.5px solid gray;}</string>
+        </property>
+        <property name="text">
+         <string>鼠标位置: x=0 , y=0 ;是否在图片内部=False 。</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item>
@@ -182,8 +192,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>361</width>
-             <height>61</height>
+             <width>374</width>
+             <height>57</height>
             </rect>
            </property>
            <property name="layoutDirection">
@@ -203,19 +213,9 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_3">
               <item>
-               <widget class="QLabel" name="label_4">
+               <widget class="QCheckBox" name="useGPU">
                 <property name="text">
-                 <string>分割细粒度</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton">
-                <property name="text">
-                 <string>确认设置</string>
+                 <string>使用GPU进行运算</string>
                 </property>
                </widget>
               </item>
@@ -375,6 +375,10 @@
    <addaction name="openDoc"/>
    <addaction name="lastFile"/>
    <addaction name="nextFile"/>
+   <addaction name="positivePoint"/>
+   <addaction name="negtivePoint"/>
+   <addaction name="positiveAng"/>
+   <addaction name="negtiveAng"/>
   </widget>
   <action name="openDoc">
    <property name="icon">
@@ -414,9 +418,55 @@
     <string>github</string>
    </property>
   </action>
+  <action name="positivePoint">
+   <property name="icon">
+    <iconset>
+     <normalon>ico/positivePoint.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>前景提示点</string>
+   </property>
+   <property name="toolTip">
+    <string>前景提示点</string>
+   </property>
+  </action>
+  <action name="negtivePoint">
+   <property name="icon">
+    <iconset>
+     <normalon>ico/negtivePoint.png</normalon>
+    </iconset>
+   </property>
+   <property name="text">
+    <string>背景提示点</string>
+   </property>
+   <property name="toolTip">
+    <string>背景提示点</string>
+   </property>
+  </action>
+  <action name="positiveAng">
+   <property name="icon">
+    <iconset>
+     <normaloff>ico/postiveAng.png</normaloff>
+     <normalon>ico/postiveAng.png</normalon>ico/postiveAng.png</iconset>
+   </property>
+   <property name="text">
+    <string>前景提示框</string>
+   </property>
+   <property name="toolTip">
+    <string>前景提示框</string>
+   </property>
+  </action>
+  <action name="negtiveAng">
+   <property name="icon">
+    <iconset>
+     <normaloff>ico/negtiveAng.png</normaloff>ico/negtiveAng.png</iconset>
+   </property>
+   <property name="text">
+    <string>背景提示框</string>
+   </property>
+  </action>
  </widget>
- <resources>
-  <include location="ico/ico.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
