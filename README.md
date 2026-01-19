@@ -1,5 +1,5 @@
-# SVMlabel
-基于分割一切大模型（SVM）的数据集标注软件
+# SAMlabel
+基于分割一切大模型（SAM）的数据集标注软件
 
 
 # SAM-YOLO 半自动标注小工具（test.py）
@@ -26,6 +26,9 @@
 ---
 
 ## 2. 一分钟上手
+教程视频(bili)：https://www.bilibili.com/video/BV1ACkeBgEmY/
+使用效果：
+![演示](pic/1.png)
 1. 装好依赖  
 ```bash
 pip install opencv-python torch torchvision
@@ -34,7 +37,7 @@ git clone https://github.com/facebookresearch/segment-anything.git
 cd segment-anything
 pip install -e .
 ```
-2. 把权重文件（如 `sam_vit_h_4b8939.pth`）放到任意路径，修改脚本顶部 `SAM_CKPT` 变量即可。  
+2. 把权重文件（如 `sam_vit_h_4b8939.pth`）放到任意路径，修改脚本顶部 `SAM_CKPT` 变量即可。  （权重文件去SAM官方库位置下载：https://github.com/facebookresearch/segment-anything）
 3. 修改脚本顶部 `IMG_DIR = r'E:\your_images'` → 指向自己的图片文件夹。  
 4. 双击 / 命令行运行：
 ```bash

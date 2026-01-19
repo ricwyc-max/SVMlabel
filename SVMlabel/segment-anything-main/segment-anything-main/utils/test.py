@@ -15,10 +15,10 @@ import sys
 import os
 
 # ========= 用户配置 =========
-IMG_DIR   = r'E:\1'
-IMG_SUFFIX = ['.jpg', '.jpeg', '.png', '.bmp']
-SAM_CKPT  = r'../../../sam_vit_h_4b8939.pth'
-SAM_MODEL = 'vit_h'
+IMG_DIR   = r'E:\1'#文件夹位置
+IMG_SUFFIX = ['.jpg', '.jpeg', '.png', '.bmp']#图片类型
+SAM_CKPT  = r'../../../sam_vit_h_4b8939.pth'#权重文件位置
+SAM_MODEL = 'vit_h'#模式（跟随权重）
 # ============================
 
 current_dir = Path(__file__).parent.resolve()
