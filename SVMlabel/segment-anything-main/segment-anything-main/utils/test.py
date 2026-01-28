@@ -16,7 +16,7 @@ import sys
 import os
 
 # ========= 用户配置 =========
-IMG_DIR   = r'D:\2025College Student Innovation and Entrepreneurship Project\images\test'#文件夹位置
+IMG_DIR   = r'D:\2025College Student Innovation and Entrepreneurship Project\images\val'#文件夹位置
 IMG_SUFFIX = ['.jpg', '.jpeg', '.png', '.bmp']#图片类型
 SAM_CKPT  = r'../../../sam_vit_h_4b8939.pth'#权重文件位置
 SAM_MODEL = 'vit_h'#模式（跟随权重）
@@ -84,7 +84,8 @@ def save_one_label(labels, p):
     txt = p.with_suffix('.txt')
     with open(txt, 'w') as f:
         for parts in labels[p.stem]:
-            f.write(' '.join(str(v) for v in parts) + '\n')
+            # 修改：确保第一列是整数格式，避免保存为 0.0
+            f.write(f"{int(parts[0])} {parts[1]} {parts[2]} {parts[3]} {parts[4]}\n")
 
 # ---------- 生成 ----------
 def yolo_line(cls_id, xyxy, img_w, img_h):
